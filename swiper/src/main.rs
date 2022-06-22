@@ -18,6 +18,6 @@ fn main () {
     let green = Color::Green;
     let blue = Color::Blue;
 
-    let points: [Point<i32>; 3] = [point, point2, point3];
-    let colors: [Color; 3] = [red, green, blue];
+    let _points: [Point<i32>; 4] = [point, point2, point3, point4];
+    let _colors: [Color; 3] = [red, green, blue];
 }
