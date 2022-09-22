@@ -27,9 +27,6 @@ fn app<'a>() -> Command<'a> {
 fn main() -> Result<()> {
     let matches = app().get_matches();
 
-    // Get our input source (which can be - or a filename) and its
-    // corresponding buffer. We don't bother streaming or chunking,
-    // since the `toml` crate only supports slices and strings.
     let input_src = matches.value_of("input").unwrap();
     let input_buf = match input_src {
         "-" => {
@@ -43,13 +40,9 @@ fn main() -> Result<()> {
             .with_context(|| format!("failed to collect from input: {}", input))?,
     };
 
-    // Turn our collected input into a value. We can't be more specific than
-    // value, since we're doing arbitrary valid TOML conversions.
     let value = toml::from_str::<toml::Value>(&input_buf)
         .with_context(|| format!("parsing TOML from {} failed", input_src))?;
-
-    // Spit back out, but as JSON. `serde_json` *does* support streaming, so
-    // we do it.
+        
     if matches.is_present("pretty") {
         serde_json::to_writer_pretty(io::stdout(), &value)
     } else {
